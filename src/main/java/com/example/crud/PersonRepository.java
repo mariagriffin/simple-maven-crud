@@ -25,7 +25,7 @@ public class PersonRepository {
                 .findFirst();
     }
 
-    public boolean update(int id, String name, String email) {
+    public boolean update(int id, String name, String email, String phoneNumber) {
         Optional<Person> person = findById(id);
         if (person.isEmpty()) {
             return false;
@@ -33,6 +33,7 @@ public class PersonRepository {
 
         person.get().setName(name);
         person.get().setEmail(email);
+        erson.get().setPhoneNumber(phoneNumber);
         return true;
     }
 
