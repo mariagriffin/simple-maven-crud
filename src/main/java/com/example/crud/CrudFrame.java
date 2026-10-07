@@ -10,7 +10,7 @@ public class CrudFrame extends JFrame {
     private final JTextField idField = new JTextField(10);
     private final JTextField nameField = new JTextField(20);
     private final JTextField emailField = new JTextField(20);
-     private final JTextField phoneField = new JTextField(15);
+    private final JTextField phoneField = new JTextField(15);
 
     private final DefaultTableModel tableModel = new DefaultTableModel(
             new Object[]{"ID", "Name", "Email","Phone Number"}, 0) {
