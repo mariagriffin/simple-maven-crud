@@ -10,9 +10,10 @@ public class CrudFrame extends JFrame {
     private final JTextField idField = new JTextField(10);
     private final JTextField nameField = new JTextField(20);
     private final JTextField emailField = new JTextField(20);
+     private final JTextField phoneField = new JTextField(15);
 
     private final DefaultTableModel tableModel = new DefaultTableModel(
-            new Object[]{"ID", "Name", "Email"}, 0) {
+            new Object[]{"ID", "Name", "Email","Phone Number"}, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
@@ -98,8 +99,9 @@ public class CrudFrame extends JFrame {
             int id = readId();
             String name = readRequired(nameField, "Name");
             String email = readRequired(emailField, "Email");
+            String phoneNumber = readRequired(phoneField, "PhoneNumber");
 
-            repository.add(new Person(id, name, email));
+            repository.add(new Person(id, name, email,phoneNumber));
             refreshTable();
             clearFields();
             showMessage("Person created successfully.");
@@ -113,8 +115,9 @@ public class CrudFrame extends JFrame {
             int id = readId();
             String name = readRequired(nameField, "Name");
             String email = readRequired(emailField, "Email");
+             String phoneNumber = readRequired(phoneField, "PhoneNumber");
 
-            if (!repository.update(id, name, email)) {
+            if (!repository.update(id, name, email,phoneNumber)) {
                 showError("No person exists with ID " + id + ".");
                 return;
             }
@@ -130,6 +133,9 @@ public class CrudFrame extends JFrame {
     private void deletePerson() {
         try {
             int id = readId();
+            if (!confirmDelete("Delete person " + id + "?")) {
+                return;
+            }
             if (!repository.delete(id)) {
                 showError("No person exists with ID " + id + ".");
                 return;
@@ -153,7 +159,7 @@ public class CrudFrame extends JFrame {
     private void refreshTable() {
         tableModel.setRowCount(0);
         for (Person person : repository.findAll()) {
-            tableModel.addRow(new Object[]{person.getId(), person.getName(), person.getEmail()});
+            tableModel.addRow(new Object[]{person.getId(), person.getName(), person.getEmail(),person.getPhoneNumber()});
         }
     }
 
@@ -163,6 +169,8 @@ public class CrudFrame extends JFrame {
             idField.setText(tableModel.getValueAt(selectedRow, 0).toString());
             nameField.setText(tableModel.getValueAt(selectedRow, 1).toString());
             emailField.setText(tableModel.getValueAt(selectedRow, 2).toString());
+            phoneField.setText(tableModel.getValueAt(selectedRow, 3).toString());
+            
         }
     }
 
@@ -195,8 +203,10 @@ public class CrudFrame extends JFrame {
         idField.setText("");
         nameField.setText("");
         emailField.setText("");
+        phoneField.setText("");
         table.clearSelection();
         idField.requestFocus();
+       
     }
 
     private void showMessage(String message) {
