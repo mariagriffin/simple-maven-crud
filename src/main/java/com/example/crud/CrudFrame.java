@@ -1,8 +1,22 @@
 package com.example.crud;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 
 public class CrudFrame extends JFrame {
     private final PersonRepository repository = new PersonRepository();
@@ -129,25 +143,54 @@ public class CrudFrame extends JFrame {
 
     private void deletePerson() {
         try {
-            int id = readId();
-            if (!repository.delete(id)) {
-                showError("No person exists with ID " + id + ".");
-                return;
-            }
+        int id = readId();
 
-            refreshTable();
-            clearFields();
-            showMessage("Person deleted successfully.");
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete the person with ID " + id + "?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        if (!repository.delete(id)) {
+            showError("No person exists with ID " + id + ".");
+            return;
+        }
+
+        refreshTable();
+        clearFields();
+        showMessage("Person deleted successfully.");
         } catch (IllegalArgumentException ex) {
-            showError(ex.getMessage());
+        showError(ex.getMessage());
         }
     }
 
     private void deleteAll() {
-        repository.clear();
-        refreshTable();
-        clearFields();
-        showMessage("All records deleted.");
+        if (tableModel.getRowCount() == 0) {
+        showMessage("There are no records to delete.");
+        return;
+    }
+
+    int choice = JOptionPane.showConfirmDialog(
+            this,
+            "This will permanently delete ALL " + tableModel.getRowCount()
+                    + " records. Are you sure?",
+            "Confirm Delete All",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+
+    if (choice != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    repository.clear();
+    refreshTable();
+    clearFields();
+    showMessage("All records deleted.");
     }
 
     private void refreshTable() {
