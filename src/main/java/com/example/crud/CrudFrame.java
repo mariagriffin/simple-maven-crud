@@ -182,6 +182,31 @@ public class CrudFrame extends JFrame {
             throw new IllegalArgumentException("ID must be a whole number.");
         }
     }
+    private String readName(){
+        String name= nameField.getText().trim();
+        if(name.isEmpty()){
+            throw new IllegalArgumentException("Name is required.");
+        }
+        if (!name.matches("[a-zA-Z ]+")){
+            throw new IllegalArgumentException(
+                "Name can only contain letters and spaces"
+            );
+        }
+        return name;
+    }
+    private String readEmail() {
+    String email = emailField.getText().trim();
+
+    if (email.isEmpty()) {
+        throw new IllegalArgumentException("Email is required.");
+    }
+
+    if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        throw new IllegalArgumentException("Please enter a valid email address.");
+    }
+
+    return email;
+}
 
     private String readRequired(JTextField field, String fieldName) {
         String value = field.getText().trim();
